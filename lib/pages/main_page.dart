@@ -15,7 +15,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _selectedIndex = index;
     });
-    _pageController.jumpToPage(index); // Navega para a página correspondente
+    _pageController.jumpToPage(index); 
   }
 
   @override
@@ -30,8 +30,8 @@ class _MainPageState extends State<MainPage> {
               accountName: Text("Isaac David"),
               accountEmail: Text("isaacdavid797@email.com"),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  'https://www.example.com/profile_image.png',
+                backgroundImage: NetworkImage(''
+                  /* 'https://www.example.com/profile_image.png', */
                 ),
               ),
               decoration: BoxDecoration(
@@ -112,8 +112,8 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue, // Cor do item selecionado
-        unselectedItemColor: Colors.grey, // Cor dos itens não selecionados
+        selectedItemColor: Colors.blue, 
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(

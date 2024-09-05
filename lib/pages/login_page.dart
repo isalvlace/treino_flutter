@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treino_flutter/pages/main_page.dart';
+import 'package:treino_flutter/service/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var emailController = TextEditingController(text: "");
   var passController = TextEditingController(text: "");
+  final AuthService _authService = AuthService(); // Instanciar AuthService
 
   @override
   Widget build(BuildContext context) {
@@ -99,43 +101,47 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginButton(TextEditingController emailController, TextEditingController passController) {
-  return SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: () {
-        if (emailController.text.trim() == "isaacdavid797@gmail.com" && passController.text.trim() == "666") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainPage(),
-            ),
-          ).then((_) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Login successful!")),
-            );
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Erro ao tentar logar!")),
-          );
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        backgroundColor: Colors.blue,
-        textStyle: const TextStyle(fontSize: 16),
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () async {
+          bool success = await _authService.login(emailController.text.trim(), passController.text.trim());
+
+          if (mounted) {
+            if (success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Login successful!")),
+              );
+
+              await Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainPage(),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Erro ao tentar logar!")),
+              );
+            }
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          backgroundColor: Colors.blue,
+          textStyle: const TextStyle(fontSize: 16),
+        ),
+        child: const Text("Login"),
       ),
-      child: const Text("Login"),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildFooterLinks() {
     return Column(
       children: [
         GestureDetector(
           onTap: () {
-            // implementação de esqueceu a senha aqui
+            // implementar ação de esqueci minha senha
           },
           child: const Text(
             "Esqueci minha senha",
